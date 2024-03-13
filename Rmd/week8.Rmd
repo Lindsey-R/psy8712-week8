@@ -1,0 +1,61 @@
+---
+title: "PSY 8712 Week 8 Project"
+author: "Ziyu Ren"
+date: "2024-03-13"
+output: 
+  html_document:
+      df_print: paged
+---
+
+## **Reproducible Image and Online Resources**
+An image of this project as of *`r Sys.Date()`* can be accessed by clicking this link.
+
+An interactive web app is available by clicking this link instead.
+
+## **Script Settings and Resources**
+```{r Script Settings and Resources, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+library(tidyverse)
+```
+
+## **Data Import and Cleaning**
+Import dataset and clean up for later analysis.
+```{r Data Import and Cleaning}
+week8_tbl <- read.csv("../data/week3.csv") %>%
+  mutate(timeStart = ymd_hms(timeStart)) %>%
+  mutate(timeEnd = ymd_hms(timeEnd)) %>%
+  mutate(condition = recode_factor(condition, "A" = "Block A", "B" = "Block B", "C" = "Control")) %>%
+  mutate(gender = recode_factor(gender,"M" = "Male", "F" = "Female")) %>%
+  mutate(q5 = 6-q5) %>%
+  mutate(across(q1:q10, as.numeric)) %>%
+  mutate(mean_1to6 = rowMeans(select(., q1:q6))) %>%
+  mutate(mean_8to10 = rowMeans(select(., q8:q10))) 
+```
+
+## **Visualization**
+Display data from Q1-Q6 and a plot of mean score from Q1-Q6 against Q8-Q10. 
+```{r Visualization, echo = F, message = FALSE, warning = FALSE}
+week8_tbl %>% 
+  select(q1:q6)
+
+week8_tbl %>%
+  ggplot(aes(x = mean_1to6, y = mean_8to10)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(x = "Mean Score Q1 to Q6",
+       y = "Mean Score Q8 to Q10")
+```
+
+## **Analysis**
+Do an analysis showing the correlation between mean score of q1 to q6 and mean score of q8 to q10. I observed a correlation of `r sub("^0", "", sprintf("%.2f", cor.test(week8_tbl$mean_1to6, week8_tbl$mean_8to10)$estimate))`, with the p_value `r cor.test(week8_tbl$mean_1to6, week8_tbl$mean_8to10)$p.value |> round(2)`. In general, this p_value is non significant and lead us to fail to reject the null hypothesis that the correlation between them is 0.  
+```{r Analysis}
+cor.test(week8_tbl$mean_1to6, week8_tbl$mean_8to10)
+```
+
+## **Data Export**
+Export data for shiny app. Delete non-used columns.
+```{r Data Export}
+week8_tbl %>%
+  select(-timeStart, -condition, -q7) %>%
+  saveRDS("../shiny/data.rds")
+```
