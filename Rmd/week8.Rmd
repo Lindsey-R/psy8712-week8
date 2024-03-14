@@ -57,5 +57,5 @@ Export data for shiny app. Delete non-used columns.
 ```{r Data Export}
 week8_tbl %>%
   select(-timeStart, -condition, -q7) %>%
-  saveRDS("../shiny/data.rds")
+  saveRDS("../shiny/shiny_week8/data.rds")
 ```
