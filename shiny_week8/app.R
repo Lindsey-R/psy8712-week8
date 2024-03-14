@@ -1,6 +1,5 @@
 library(shiny)
 library(tidyverse)
-library(ggplot2)
 
 ui <- fluidPage(
     
@@ -9,6 +8,7 @@ ui <- fluidPage(
     
     sidebarLayout(
         sidebarPanel(
+          
           # Input select on gender
             selectInput("gender", label = "Select the Gender",
                         choices = c("Female", "Male", "All"),
@@ -39,29 +39,26 @@ server <- function(input, output) {
     output$plot <- renderPlot({
       
       # data after selecting gender: if select "All", keep original data
-      if(input$gender == "All") {
-        data_shiny <- data_shiny
-      } else if(!!sym(input$gender) != "All"){
+      if(input$gender != "All"){
         data_shiny <- data_shiny %>%
           filter(gender == input$gender)
       }
       
       # data after selecting date: if select include, keep original data
-      if(input$date == "Include data") {
-        data_shiny <- data_shiny 
-      } else if (input$date == "Don't include data") {
+      if (input$date == "Don't include data") {
         data_shiny <- data_shiny %>%
           filter(timeEnd >= ymd("2017-07-01"))
       }
       
+      
       # plot with or without error band
-      if(!!sym(input$errorband) == "Display Error Band") {
+      if(input$errorband == "Display Error Band") {
        ggplot(data_shiny, aes(x = mean_1to6, y = mean_8to10)) +
         geom_point() +
         geom_smooth(method = "lm", color = "purple", se = TRUE) +
         labs(x = "Mean Scores on Q1 to Q6",
              y = "Mean Scores on Q8 to Q10")
-      } else if (!!sym(input$errorband) == "Suppress Error Band") {
+      } else if (input$errorband == "Suppress Error Band") {
         ggplot(data_shiny, aes(x = mean_1to6, y = mean_8to10)) +
           geom_point() +
           geom_smooth(method = "lm", color = "purple", se = FALSE) +
@@ -74,3 +71,6 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+getwd()
+
