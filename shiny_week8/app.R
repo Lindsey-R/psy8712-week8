@@ -33,10 +33,12 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     
-    # read in dataset
-    data_shiny <- readRDS("./data.rds")
+    
     
     output$plot <- renderPlot({
+      
+      # read in dataset
+      data_shiny <- readRDS("./data.rds")
       
       # data after selecting gender: if select "All", keep original data
       if(input$gender != "All"){
@@ -71,6 +73,3 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
-getwd()
-

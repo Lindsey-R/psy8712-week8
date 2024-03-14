@@ -2,15 +2,15 @@
 title: "PSY 8712 Week 8 Project"
 author: "Ziyu Ren"
 date: "2024-03-13"
-output: 
+output:
   html_document:
-      df_print: paged
+    df_print: paged
 ---
 
 ## **Reproducible Image and Online Resources**
 An image of this project as of *`r Sys.Date()`* can be accessed by clicking this link.
 
-An interactive web app is available by clicking this link instead.
+An interactive web app is available by <https://purplefishlovespig.shinyapps.io/shiny_week8/>.
 
 ## **Script Settings and Resources**
 ```{r Script Settings and Resources, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
@@ -57,5 +57,5 @@ Export data for shiny app. Delete non-used columns.
 ```{r Data Export}
 week8_tbl %>%
   select(-timeStart, -condition, -q7) %>%
-  saveRDS("../shiny/shiny_week8/data.rds")
+  saveRDS("../shiny_week8/data.rds")
 ```

@@ -5,7 +5,7 @@ account: purplefishlovespig
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11485109
-bundleId: 8369987
+bundleId: 8370065
 url: https://purplefishlovespig.shinyapps.io/shiny_week8/
 version: 1
 asMultiple: FALSE
